@@ -178,4 +178,11 @@ router.get("/user/:userId", async(req, res) => {
     return res.status(500).send({error})
   }
 })
+
+router.put("/users/:userId", async (req, res) => {
+  User.updateOne({_id: req.params.userId}, req.body, function(err, doc){
+    if(err) {console.error(err); return res.status(500).send({err})}
+    return res.status(200).send({doc})
+  })
+})
 module.exports = (app) => app.use("/auth", router);
