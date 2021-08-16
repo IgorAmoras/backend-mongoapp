@@ -69,7 +69,7 @@ router.post("/create", async (req, res) => {
       })
       );
 
-    project.parsed = name;
+    project.username = name;
 
     await project.save();
 

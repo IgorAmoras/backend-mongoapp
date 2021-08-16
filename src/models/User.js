@@ -53,6 +53,7 @@ UserSchema.pre("save", async function(next){
   }
   next();
 });
+
 UserSchema.plugin(updateInitialLetter)
 
 const User = mongoose.model("User", UserSchema);

@@ -24,9 +24,7 @@ const ProjectSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  initials: {
-    type: String,
-  }
+
 });
 
 ProjectSchema.plugin(initialLetterPlugin)
