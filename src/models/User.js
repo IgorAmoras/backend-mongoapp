@@ -1,6 +1,7 @@
 const mongoose = require("../database/index");
 const Project = require('./Project')
 const bcrypt = require("bcryptjs");
+const { updateInitialLetter } = require('../middlewares/updateInitial')
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -39,7 +40,7 @@ UserSchema.pre('findOneAndDelete', async function(next){
       next()
     })
   } catch (error) {
-   //console.error(error)    
+   throw error 
   }
 })
 
@@ -52,6 +53,7 @@ UserSchema.pre("save", async function(next){
   }
   next();
 });
+UserSchema.plugin(updateInitialLetter)
 
 const User = mongoose.model("User", UserSchema);
 

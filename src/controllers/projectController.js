@@ -2,7 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const authMiddleware = require("../middlewares/middlewareAuth");
 const { permissionAcess } = require("../middlewares/sessionAuth");
+const { getInitials } = require('../middlewares/parseName')
 const Project = require("../models/Project");
+const User = require('../models/User')
 const Task = require("../models/Task");
 
 const router = express.Router();
@@ -19,8 +21,9 @@ router.get("/all", permissionAcess, async (req, res) => {
       });
     }
     if (permission === "User") {
-      const userProjects = [];
-      const projects = await Project.find({user: req.userId })
+      const initials = await (await getInitials(req)).toUpperCase()
+      console.log(initials)
+      const projects = await Project.find({initials})
         .populate(["user", "tasks"])
 
       return res.status(200).send({ projects });
@@ -52,28 +55,30 @@ router.get("/:projectId", async (req, res) => {
 router.post("/create", async (req, res) => {
   try {
     const { title, description, tasks } = req.body;
-
+    const { name } = await User.findById(req.userId)
     const project = await Project.create({
       title,
       description,
       user: req.userId,
     });
-
+    
     await Promise.all(
       tasks.map(async (task) => {
         const projectTask = new Task({ ...task, project: project._id });
         await projectTask.save();
         project.tasks.push(projectTask);
       })
-    );
+      );
+
+    project.parsed = name;
 
     await project.save();
-
 
     return res.status(200).send({
       project,
     });
   } catch (error) {
+    console.error(error)
     return res.status(200).send({
       error: "There has been an error while creating the project",
     });
@@ -82,7 +87,7 @@ router.post("/create", async (req, res) => {
 router.put("/:projectId", async (req, res) => {
   try {
     const { title, description, tasks } = req.body;
-    const project = await Project.findByIdAndUpdate(
+    const project = await Project.findOneAndUpdate(
       req.params.projectId,
       {
         title,

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-
+const { initialLetterPlugin } = require('../middlewares/namePlugin')
+const User = require('./User')
 const ProjectSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -23,8 +24,12 @@ const ProjectSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  initials: {
+    type: String,
+  }
 });
 
+ProjectSchema.plugin(initialLetterPlugin)
 const Project = mongoose.model("Project", ProjectSchema);
 
 module.exports = Project;

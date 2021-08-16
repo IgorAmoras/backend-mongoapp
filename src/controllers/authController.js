@@ -181,7 +181,7 @@ router.get("/user/:userId", async(req, res) => {
 
 router.put("/users/:userId", async (req, res) => {
   try{
-    User.updateOne({_id: req.params.userId}, req.body, function(err, doc){
+    User.findOneAndUpdate({_id: req.params.userId}, req.body, function(err, doc){
       if(err) {console.error(err); return res.status(500).send({err})}
       return res.status(200).send({doc})
     })
