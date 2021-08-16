@@ -8,6 +8,6 @@ module.exports = {
       if(this.lenght === 1) initials += unique.substring(0, 1)
       initials += unique.charAt(0)
     }, name)
-    return initials;
+    return initials.toUpperCase();
   },
 };

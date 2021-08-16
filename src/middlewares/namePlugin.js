@@ -8,7 +8,6 @@ module.exports = {
         if(names.length === 1){inis = name.charAt(0) + name.charAt(1); return;}
         inis += name.charAt(0)
       })
-      console.log(inis)
       this.initials = inis
       next()
     })

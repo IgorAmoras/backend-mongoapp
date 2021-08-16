@@ -7,12 +7,9 @@ module.exports = {
       this._update.name.split(' ').forEach(name => {
         initials += name.charAt(0)
       })
-      initials.toUpperCase()
-      const updated = await Project.updateMany({user: this._conditions._id}, {initials: initials.toUpperCase()})
+      const updated = await Project.updateMany({user: this._conditions._id}, {"$set":{initials: initials.toUpperCase()}})
       console.log(updated)
-      
-      //const projects = await Project.updateMany({initials})
-
+      next()
     })
   }
 }

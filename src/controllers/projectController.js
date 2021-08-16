@@ -21,8 +21,7 @@ router.get("/all", permissionAcess, async (req, res) => {
       });
     }
     if (permission === "User") {
-      const initials = await (await getInitials(req)).toUpperCase()
-      console.log(initials)
+      let initials = await getInitials(req)
       const projects = await Project.find({initials})
         .populate(["user", "tasks"])
 
